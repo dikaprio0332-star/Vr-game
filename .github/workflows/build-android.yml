@@ -17,11 +17,18 @@ jobs:
         with:
           lfs: true
 
+      # Repo holds UnityJoyConVR.zip as-is; unpack it into UnityJoyConVR/
+      # before Unity ever touches it. Change the zip/folder name here if yours differs.
+      - name: Unpack Unity project zip
+        run: |
+          unzip -q UnityJoyConVR.zip -d .
+          test -d UnityJoyConVR/Assets && test -d UnityJoyConVR/ProjectSettings
+
       - name: Cache Unity Library
         uses: actions/cache@v4
         with:
-          path: Library
-          key: Library-Android-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          path: UnityJoyConVR/Library
+          key: Library-Android-${{ hashFiles('UnityJoyConVR.zip') }}
           restore-keys: |
             Library-Android-
             Library-
@@ -33,6 +40,7 @@ jobs:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          projectPath: UnityJoyConVR
           targetPlatform: Android
           androidExportType: androidPackage # builds a .apk (use androidAppBundle for .aab)
           androidKeystoreName: ""
