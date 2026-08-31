@@ -42,6 +42,9 @@ jobs:
         with:
           projectPath: UnityJoyConVR
           targetPlatform: Android
+          # Project lives inside a zip, not tracked in git directly, so the
+          # unzipped folder always looks "dirty" to git - skip git-based versioning.
+          versioning: None
           androidExportType: androidPackage # builds a .apk (use androidAppBundle for .aab)
           androidKeystoreName: ""
           androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
